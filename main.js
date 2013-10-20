@@ -14,8 +14,8 @@ var gameModule = (function (){
 		 	b = Math.floor(Math.random() * 255),
 		 	second = 500+Math.floor(Math.random() * 1500);
 
-		canvas.width = 480;
-		canvas.height = 640;
+		canvas.width = 640;
+		canvas.height = 480;
 
 		ctx.fillStyle = "rgb("+r+","+g+","+b+")";
 
@@ -28,12 +28,7 @@ var gameModule = (function (){
 
 		}
 		else{
-			if(ballR >= 50){
-				setTimeoutVar = setTimeout(start,second);
-			}
-			else{
-				setTimeoutVar = setTimeout(start,second);
-			}				
+			setTimeoutVar = setTimeout(start,second);			
 			count++;
 			console.log("count ="+count);
 
