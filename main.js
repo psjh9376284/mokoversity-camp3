@@ -1,69 +1,73 @@
-var gameModule = (function (){
-	
-	var setTimeoutVar,
-		count = 0,
-		ballX,
-		ballY,
-		ballR,
-		scores;		
+/*jslint browser: true, devel: true, closure: true */
+var gameModule = (function (document) {
 
-	function touchEvent(evt){
-		var x = evt.clientX,
-			y = evt.clientY,
-			tmp;
-		console.log("Clicked  ("+x+","+y+")");
+    "use strict";
+    var count = 0,
+        ballX,
+        ballY,
+        ballR,
+        scores = 0;
 
-		tmp = (ballX-x)*(ballX-x)+(ballY-y)*(ballY-y);
-		if(tmp <= ballR*ballR){
-			console.log("YOU get it! Very Good!");
-		}
+    function gameOver() {
+        console.log("Your finally scores =" + scores);
+    }
 
-	}
+    function startGame() {
 
-	function start(){
-		document.getElementById("main").addEventListener("click",touchEvent,false);
-		startGame();
-	}
+        var canvas = document.getElementById('game'),
+            ctx = canvas.getContext('2d'),
+            r = Math.floor(Math.random() * 255),
+            g = Math.floor(Math.random() * 255),
+            b = Math.floor(Math.random() * 255),
+            second = 500 + Math.floor(Math.random() * 1500);
 
-	function startGame(){
-
-		var canvas = document.getElementById('game'),
-		 	ctx = canvas.getContext('2d'),
-		 	r = Math.floor(Math.random() * 255),
-		 	g = Math.floor(Math.random() * 255),
-		 	b = Math.floor(Math.random() * 255),
-		 	second = 500+Math.floor(Math.random() * 1500);
-			ballX = Math.floor(Math.random() * 640);
-		 	ballY = Math.floor(Math.random() * 480);
-		 	ballR = 10+Math.floor(Math.random() * 90);
+        ballX = Math.floor(Math.random() * 640);
+        ballY = Math.floor(Math.random() * 480);
+        ballR = 10 + Math.floor(Math.random() * 90);
 
 
-		canvas.width = 640;
-		canvas.height = 480;
+        canvas.width = 640;
+        canvas.height = 480;
 
-		ctx.fillStyle = "rgb("+r+","+g+","+b+")";
-		ctx.beginPath();
-		ctx.arc( ballX, ballY, ballR, 0, Math.PI * 2, true);
+        ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+        ctx.beginPath();
+        ctx.arc(ballX, ballY, ballR, 0, Math.PI * 2, true);
+        ctx.fill();
 
-		ctx.fill();
+        if (count >= 10) {
+            gameOver();
+        } else {
+            setTimeout(startGame, second);
+            count = count + 1;
+        }
+    }
 
-		if(count >= 10){
+    function touchEvent(evt) {
+        var x = evt.clientX,
+            y = evt.clientY,
+            tmp;
+        //console.log("Clicked  ("+x+","+y+")");
 
-		}
-		else{
-			setTimeoutVar = setTimeout(start,second);			
-			count++;
-			console.log("count ="+count);
+        tmp = (ballX - x) * (ballX - x) + (ballY - y) * (ballY - y);
+        if (tmp <= ballR * ballR) {
+            scores += (100 - ballR);
+            console.log("You get it! Very Good!");
+            console.log("Your  scores now:" + scores);
+        } else {
+            scores = scores - 50;
+            console.log("Oh oh!!! You lost your scores");
+            console.log("Your  scores now:" + scores);
+        }
 
-		}
+    }
 
-	}
-	function gameover(){
-
-	}
-	return {
-		start : start
-	}
-}) ();
+    function start() {
+        document.getElementById("main").addEventListener("click", touchEvent, false);
+        startGame();
+    }
+    return {
+        start: start
+    };
+}(document));
 
 gameModule.start();
