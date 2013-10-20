@@ -35,6 +35,7 @@ var gameModule = (function (document) {
         ctx.fill();
 
         if (count >= 10) {
+            
             gameOver();
         } else {
             setTimeout(startGame, second);
