@@ -1,13 +1,26 @@
 var gameModule = (function (){
 	
 	var setTimeoutVar,
-		count = 0;
+		count = 0;		
+
+	function touchEvent(evt){
+		var x = evt.clientX,
+			y = evt.clientY;
+		console.log("Clicked  ("+x+","+y+")");
+
+	}
+
 	function start(){
+		document.getElementById("main").addEventListener("click",touchEvent,false);
+		startGame();
+	}
+
+	function startGame(){
 
 		var canvas = document.getElementById('game'),
 		 	ctx = canvas.getContext('2d'),
-		 	ballX = Math.floor(Math.random() * 300),
-		 	ballY = Math.floor(Math.random() * 500),
+			ballX = Math.floor(Math.random() * 640),
+		 	ballY = Math.floor(Math.random() * 480),
 		 	ballR = 10+Math.floor(Math.random() * 90),
 		 	r = Math.floor(Math.random() * 255),
 		 	g = Math.floor(Math.random() * 255),
@@ -18,7 +31,6 @@ var gameModule = (function (){
 		canvas.height = 480;
 
 		ctx.fillStyle = "rgb("+r+","+g+","+b+")";
-
 		ctx.beginPath();
 		ctx.arc( ballX, ballY, ballR, 0, Math.PI * 2, true);
 
