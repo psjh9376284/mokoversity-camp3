@@ -1,8 +1,10 @@
 /*jslint browser: true, devel: true, closure: true */
-var gameModule = (function (document) {
+var gameModule = (function (document, $) {
 
     "use strict";
     var count = 0,
+    	canvas = document.getElementById('game'),
+        ctx = canvas.getContext('2d'),
         ballX,
         ballY,
         ballR,
@@ -10,16 +12,18 @@ var gameModule = (function (document) {
 
     function gameOver() {
         console.log("Your finally scores =" + scores);
+
+        var api = "http://127.0.0.1:3000/scores?score=" + scores;
+
+        $.ajax({ url: api});
     }
 
     function startGame() {
 
-        var canvas = document.getElementById('game'),
-            ctx = canvas.getContext('2d'),
-            r = Math.floor(Math.random() * 255),
+        var r = Math.floor(Math.random() * 255),
             g = Math.floor(Math.random() * 255),
             b = Math.floor(Math.random() * 255),
-            second = 500 + Math.floor(Math.random() * 1500);
+            second = 600 + Math.floor(Math.random() * 1000);
 
         ballX = Math.floor(Math.random() * 640);
         ballY = Math.floor(Math.random() * 480);
@@ -35,7 +39,11 @@ var gameModule = (function (document) {
         ctx.fill();
 
         if (count >= 10) {
-            
+            canvas = document.getElementById('game');
+            ctx = canvas.getContext('2d');
+            canvas.width = 640;
+            canvas.height = 480;
+            document.getElementById("main").removeEventListener("click", touchEvent, false);
             gameOver();
         } else {
             setTimeout(startGame, second);
@@ -59,6 +67,8 @@ var gameModule = (function (document) {
             console.log("Oh oh!!! You lost your scores");
             console.log("Your  scores now:" + scores);
         }
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.restore;
 
     }
 
@@ -69,6 +79,6 @@ var gameModule = (function (document) {
     return {
         start: start
     };
-}(document));
+}(document, $));
 
 gameModule.start();
